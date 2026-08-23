@@ -12,6 +12,7 @@ import { createDiaryCommands } from "./diary.ts";
 import { createDiffCommands } from "./diff.ts";
 import { createInitCommands } from "./init.ts";
 import { createInjectionCommands } from "./injection.ts";
+import { createLockCommands } from "./locks.ts";
 import { createMessagingCommands } from "./messaging.ts";
 import { createObligationCommands } from "./obligations.ts";
 import { createPersonalCommands } from "./personal.ts";
@@ -37,6 +38,7 @@ const COMMAND_FAMILIES: readonly CommandFactory[] = [
   createWhoamiCommands,
   createTouchingCommands,
   createDiffCommands,
+  createLockCommands,
   createDiagnosticCommands,
   createInjectionCommands,
   createInitCommands,

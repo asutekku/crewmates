@@ -13,9 +13,10 @@ import { isAbsolute } from "node:path";
 
 import { looksReadOnly } from "../core/bashEdits.ts";
 import { loadCrewFile, type CrewFile } from "../core/crewfile.ts";
+import { DEFAULT_LOCK_TTL_MS, lockForCommand } from "../core/locks.ts";
 import { resolveProject } from "../core/repo.ts";
 import { emit, readPayload } from "../core/shared.ts";
-import { lineageName, withStore } from "../core/store.ts";
+import { displayName, lineageName, withStore } from "../core/store.ts";
 
 /** A shell loop. `until` counts: `until [ -s f ]; do sleep 5; done` is the same bug. */
 const LOOP = /\b(?:for|while|until)\b/;
@@ -271,8 +272,32 @@ async function main(): Promise<void> {
   if (warning !== "") emit("PreToolUse", warning, "presence: crew.json testPolicy is scoped-only");
 
   const sessionId = payload?.session_id;
-  if (sessionId && !looksReadOnly(command)) {
-    withStore(project.dbPath, (store) => store.markBashStart(sessionId, Date.now()));
+  const needs = lockForCommand(command, crew.locks);
+  if (sessionId && (needs !== null || !looksReadOnly(command))) {
+    const held = withStore(project.dbPath, (store) => {
+      const now = Date.now();
+      if (!looksReadOnly(command)) store.markBashStart(sessionId, now);
+      if (needs === null) return null;
+      store.sweepLocks(now);
+      const self = store.findBySession(sessionId);
+      if (!self) return null;
+      const got = store.locks.acquire({
+        name: needs, sessionId, holder: displayName(self), ttlMs: DEFAULT_LOCK_TTL_MS, auto: true, nowMs: now,
+      });
+      if (got.ok) return null;
+      store.locks.wait(needs, sessionId, now);
+      return got.held;
+    });
+    if (held) {
+      const left = Math.max(1, Math.ceil((held.expiresMs - Date.now()) / 60_000));
+      emit(
+        "PreToolUse",
+        `\`${needs}\` is locked by ${held.holder} (${left}m left${held.note !== "" ? `, "${held.note}"` : ""}). ` +
+          `Running this now shares the resource with them — a test run or port in use at the same time. ` +
+          `You are in line: a message arrives when it frees. \`crew locks\` lists every lock.`,
+        `presence: ${needs} is locked by ${held.holder}`,
+      );
+    }
   }
 
   // Guarded by the cheap regex FIRST: the db open and the message read must not

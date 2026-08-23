@@ -3,6 +3,7 @@ import { Database } from "bun:sqlite";
 import { ensureBaseDir } from "../repo.ts";
 import { createWorkTables } from "../work.ts";
 import { createDiaryTables } from "../diary.ts";
+import { createLockTables } from "../locks.ts";
 import { createQuestionTables } from "../questions.ts";
 import { createObligationTables } from "../obligations.ts";
 import { OwnershipStore } from "./ownership.ts";
@@ -332,6 +333,7 @@ export function openDb(dbPath: string): Database {
   `);
   createWorkTables(db);
   createDiaryTables(db);
+  createLockTables(db);
   createQuestionTables(db);
   createObligationTables(db);
   // `CREATE TABLE IF NOT EXISTS` leaves an EXISTING table alone, so a column

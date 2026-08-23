@@ -108,6 +108,7 @@ async function main(): Promise<void> {
   const report = withStore(project.dbPath, (store) => {
     const now = Date.now();
     store.touch(sessionId, now);
+    store.sweepLocks(now);
 
     // Re-registers if the row was reaped: this hook firing proves the session
     // is alive, and a pruned session that cannot come back is invisible to

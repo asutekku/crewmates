@@ -8,6 +8,7 @@
 
 import { Database } from "bun:sqlite";
 
+import { LockStore, type Waiter } from "../locks.ts";
 import { WorkStore } from "../work.ts";
 import { DiaryStore } from "../diary.ts";
 import { QuestionStore } from "../questions.ts";
@@ -91,6 +92,7 @@ export class Store {
   // outlives the STALE_MS sweep, the diary keeps entries for a year.
   readonly work: WorkStore;
   readonly diary: DiaryStore;
+  readonly locks: LockStore;
   readonly questions: QuestionStore;
   readonly obligations: ObligationStore;
 
@@ -112,6 +114,7 @@ export class Store {
     this.past = new PastSessionStore(db);
     this.work = new WorkStore(db);
     this.diary = new DiaryStore(db);
+    this.locks = new LockStore(db);
     this.questions = new QuestionStore(db);
     this.obligations = new ObligationStore(db, (input) => this.recordFeatureEvent(input));
   }
@@ -165,6 +168,24 @@ export class Store {
   register(sessionId: string, worktree: string, branch: string, nowMs: number): string {
     return this.sessions.register(sessionId, worktree, branch, nowMs);
   }
+  /** Tells each waiter the lock is free. Delivered at their next hook. */
+  notifyLockFree(name: string, waiters: readonly Waiter[], why: string, nowMs: number): void {
+    for (const waiter of waiters) {
+      const session = this.findBySession(waiter.sessionId);
+      if (!session) continue;
+      this.post("crew", "say", `lock \`${name}\` is free (${why}) — \`crew lock ${name}\` takes it`, nowMs, {
+        sessionId: waiter.sessionId,
+        name: displayName(session),
+      });
+    }
+  }
+
+  sweepLocks(nowMs: number): void {
+    for (const { lock, waiters } of this.locks.sweep(nowMs)) {
+      this.notifyLockFree(lock.name, waiters, `${lock.holder}'s lock expired`, nowMs);
+    }
+  }
+
   markBashStart(sessionId: string, nowMs: number): void {
     this.sessions.markBashStart(sessionId, nowMs);
   }

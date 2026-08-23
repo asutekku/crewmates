@@ -64,6 +64,7 @@ Four folders by role: `hooks/` is the event surface, `core/` is shared domain co
 | `verbs.ts`            | Every CLI verb in one table; `usage()` and per-verb argument errors render from it.                                                       |
 | `names.ts`            | The given-name pool, and the two casers (prose role vs typeable name).                                                                    |
 | `bashEdits.ts`        | Read-only command detection, and dirty files changed since a timestamp.                                                                   |
+| `locks.ts`            | Named, time-limited resource locks with a wait list; expiry is swept on hooks.                                                            |
 | `dirty.ts`            | Uncommitted files, for the roster's "what is in flight" line.                                                                             |
 | `config.ts`           | Tunables — staleness windows, how much of the board to show.                                                                              |
 | `crewfile.ts`         | The repo's shape from `.claude/crew.json` — hot/generated globs, checks, per-repo tunables. Degrades per field.                           |
@@ -100,6 +101,7 @@ Four folders by role: `hooks/` is the event surface, `core/` is shared domain co
 | `structured.ts`        | Pure parser for single-act structured-message shortcuts.                            |
 | `structured-json.ts`   | Complete unknown-to-domain decoder for structured JSON batches.                     |
 | `admin.ts`             | Naming, roles, project location, roster clearing, and deregistration.               |
+| `locks.ts`             | `lock`, `unlock`, `locks`.                                                          |
 | `diff.ts`              | A peer's claimed paths as `git diff HEAD` in their worktree.                        |
 | `touching.ts`          | Claim paths by intent, before the first write; holders are messaged.                |
 | `whoami.ts`            | One session's identity, state, work and files as text or JSON, for statuslines.     |

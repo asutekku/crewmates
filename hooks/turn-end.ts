@@ -31,6 +31,7 @@ async function main(): Promise<void> {
   const report = withStore(project.dbPath, (store) => {
     const now = Date.now();
     store.touch(sessionId, now);
+    store.sweepLocks(now);
     // Re-registers a reaped session: a turn ending proves it is alive, and a
     // long turn that ran no Edit/Write heartbeats only once, at its start.
     const handle = store.handleForOrRegister(sessionId, worktreeRoot(cwd), currentBranch(cwd), now);

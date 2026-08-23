@@ -47,6 +47,8 @@ export interface CrewFile {
   readonly testPolicy: "" | "scoped-only" | "full-ok";
   readonly commit: CommitPolicy;
   readonly codegen: readonly CodegenPair[];
+  /** Lock name → regex over a shell command. `tests` defaults to `checks.test`. */
+  readonly locks: Readonly<Record<string, string>>;
   /** Only valid PresenceConfig keys with finite positive values survive parsing. */
   readonly tunables: Partial<PresenceConfig>;
   /** Top-level keys that are neither schema nor reserved. Kept for `--check`. */
@@ -68,6 +70,7 @@ const SCHEMA_KEYS = new Set([
   "testPolicy",
   "commit",
   "codegen",
+  "locks",
   "tunables",
 ]);
 
@@ -89,6 +92,7 @@ export const EMPTY_CREWFILE: CrewFile = {
   testPolicy: "",
   commit: DEFAULT_COMMIT,
   codegen: [],
+  locks: {},
   tunables: {},
   unknownKeys: [],
   reservedKeys: [],
@@ -156,6 +160,20 @@ function parseTunables(value: unknown): Partial<PresenceConfig> {
 }
 
 /** Per-field parse of anything claiming to be a crew.json. Never throws. */
+function escapeRegex(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function parseLocks(value: unknown, checks: CrewChecks): Record<string, string> {
+  const locks: Record<string, string> = {};
+  if (checks.test.trim() !== "") locks["tests"] = `\\b${escapeRegex(checks.test.trim())}\\b`;
+  if (typeof value !== "object" || value === null) return locks;
+  for (const [name, pattern] of Object.entries(value as Record<string, unknown>)) {
+    if (typeof pattern === "string" && /^[a-z][a-z0-9-]*$/.test(name)) locks[name] = pattern;
+  }
+  return locks;
+}
+
 export function parseCrewFile(raw: unknown): CrewFile {
   if (typeof raw !== "object" || raw === null || Array.isArray(raw)) return EMPTY_CREWFILE;
   const o = raw as Record<string, unknown>;
@@ -171,6 +189,7 @@ export function parseCrewFile(raw: unknown): CrewFile {
     testPolicy: policy === "scoped-only" || policy === "full-ok" ? policy : "",
     commit: parseCommit(o["commit"]),
     codegen: parseCodegen(o["codegen"]),
+    locks: parseLocks(o["locks"], parseChecks(o["checks"])),
     tunables: parseTunables(o["tunables"]),
     unknownKeys: keys.filter(
       (k) => !SCHEMA_KEYS.has(k) && !(RESERVED_KEYS as readonly string[]).includes(k),

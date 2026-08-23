@@ -26,9 +26,12 @@ async function main(): Promise<void> {
   const crew = loadCrewFile(project.root);
 
   const notice = withStore(project.dbPath, (store) => {
+    const now = Date.now();
+    for (const { name, waiters } of store.locks.releaseAuto(sessionId)) {
+      store.notifyLockFree(name, waiters, "the command finished", now);
+    }
     const since = store.bashStartedMs(sessionId);
     if (since === 0) return null;
-    const now = Date.now();
     store.markBashStart(sessionId, 0);
     const changed = changedSince(tree, since)
       .filter((path) => !matchesAny(crew.generated, path))

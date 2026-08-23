@@ -183,6 +183,18 @@ Co-Authored-By: Aoi (Claude Opus 5) <noreply@anthropic.com>
 
 The block teaches this; `pre-bash` enforces it, **denying** a commit with no trailer or one naming another agent. The `Claude-Session:` trailer is off by default — the link points at a private transcript. See [Design notes](docs/design-notes.md#signing-commits).
 
+## Locks
+
+Two agents running the full suite, or both starting a dev server on one port, collide without either noticing. A lock is a named, timed claim on the resource:
+
+```sh
+crew lock tests --for 5m --note "full run before commit"
+crew unlock tests
+crew locks
+```
+
+`tests` locks itself: `pre-bash` takes it when a command matches `checks.test` in `crew.json` and drops it when the command ends. Other resources come from `crew.json`'s `locks` map, lock name to a regex over the command (`"dev": "vite|next dev"`). A second agent that runs the command or asks for the lock is warned, queued, and messaged when the lock is released or expires. Like every other signal here it is advisory: nothing is blocked, and a message reaches a session at its next hook — an idle one reads it when it is next prompted.
+
 ## Statusline
 
 `crew whoami` prints this session's name; `--session <id>` takes the `session_id` Claude Code pipes to a statusline command, and `--json` adds state, open work, the file being edited and unread mail.
@@ -230,6 +242,9 @@ Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if 
 | `clearance <id> [revoke\|expire] [flags]` | inspect, revoke or expire a clearance |
 | `clearances [--all]` | every clearance still in force |
 | `touching <path> [<path>...]` | claim files before editing; whoever holds them is told now |
+| `lock <name> [--for 5m] [--note "<why>"]` | hold a shared resource (tests, a port); waiters are told when it frees |
+| `unlock <name>` | release a lock you hold |
+| `locks` | every lock held, by whom, for how much longer |
 | `files <agent> [--hours 24]` | every file an agent has touched, and why |
 | `diff <agent> [--stat] [--hours n]` | a peer's uncommitted changes, limited to files they touched |
 | `blame <path>` | who has been in this file, newest first |
