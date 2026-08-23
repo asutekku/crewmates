@@ -15,13 +15,27 @@ export function looksReadOnly(command: string): boolean {
   return READ_ONLY_HEAD.test(command);
 }
 
-/** Dirty paths in `tree` whose mtime is at or after `sinceMs`. */
-export function changedSince(tree: string, sinceMs: number): string[] {
+/**
+ * Does the command name this path? The tree is shared, so a file that changed
+ * during the command may be a peer's work; an mtime alone attributes it to
+ * the wrong agent. The path, or its basename, has to appear in the text.
+ */
+export function commandNames(command: string, path: string): boolean {
+  if (command.includes(path)) return true;
+  const base = path.split("/").pop() ?? path;
+  if (base === "" || base.length < 3) return false;
+  const escaped = base.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?:^|[\\s/"'=])${escaped}(?:$|[\\s"';&|)])`).test(command);
+}
+
+/** Dirty paths in `tree` that the command names and that changed at or after `sinceMs`. */
+export function changedSince(tree: string, sinceMs: number, command = ""): string[] {
   if (sinceMs <= 0) return [];
   const dirty = dirtyFiles(tree);
   if (dirty === null) return [];
   const out: string[] = [];
   for (const path of dirty) {
+    if (command !== "" && !commandNames(command, path)) continue;
     try {
       if (statSync(`${tree}/${path}`).mtimeMs >= sinceMs - 1000) out.push(path);
     } catch {

@@ -3,7 +3,9 @@
  *
  * Edit/Write go through pre-edit; a heredoc, `sed -i` or a script does not,
  * and those edits were invisible to every peer. The files are read off
- * `git status` and filtered by mtime since pre-bash marked the command's start.
+ * `git status`, filtered by mtime since pre-bash marked the command's start,
+ * and kept only when the command names them — the tree is shared, and a
+ * peer's edit landing mid-command must not be claimed as this session's.
  */
 
 import { changedSince } from "../core/bashEdits.ts";
@@ -33,7 +35,7 @@ async function main(): Promise<void> {
     const since = store.bashStartedMs(sessionId);
     if (since === 0) return null;
     store.markBashStart(sessionId, 0);
-    const changed = changedSince(tree, since)
+    const changed = changedSince(tree, since, payload.tool_input?.command ?? "")
       .filter((path) => !matchesAny(crew.generated, path))
       .slice(0, MAX_CLAIMS);
     if (changed.length === 0) return null;

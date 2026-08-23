@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { afterEach, describe, expect, test } from "bun:test";
 
-import { changedSince, looksReadOnly } from "../core/bashEdits.ts";
+import { changedSince, commandNames, looksReadOnly } from "../core/bashEdits.ts";
 import { clearDirtyCache } from "../core/dirty.ts";
 
 describe("looksReadOnly", () => {
@@ -35,5 +35,16 @@ describe("changedSince", () => {
     expect(changedSince(tree, before)).toEqual(["src/old.ts"]);
     expect(changedSince(tree, Date.now() + 5_000)).toEqual([]);
     expect(changedSince(tree, 0)).toEqual([]);
+    expect(changedSince(tree, before, "sed -i '' s/a/b/ src/old.ts")).toEqual(["src/old.ts"]);
+    expect(changedSince(tree, before, "bun test")).toEqual([]);
+  });
+});
+
+describe("commandNames", () => {
+  test("full path, basename, or neither", () => {
+    expect(commandNames("cat > docs/world.md <<'EOF'", "docs/world.md")).toBe(true);
+    expect(commandNames("python3 - <<'EOF'\np='world.md'\nEOF", "docs/world.md")).toBe(true);
+    expect(commandNames("bun test test/x.test.ts", "docs/world.md")).toBe(false);
+    expect(commandNames("echo worldly", "docs/world.md")).toBe(false);
   });
 });
