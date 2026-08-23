@@ -19,6 +19,8 @@ export const NAME_REUSE_MS = 60 * 60 * 60 * 1000; // 60 h
  * The pool, alphabetical so a duplicate is visible when editing. Large because
  * a name is held 60 hours after its last use, so it must cover days of churn.
  * Mixed origins on purpose: one theme makes names blur together.
+ * NO MODEL OR ASSISTANT NAMES: an agent called "fable" running Opus reads as
+ * a lie in every roster line.
  */
 export const GIVEN_NAMES = [
   "adela", "akari", "akira", "alder", "ambrose", "anouk", "anton", "aoi", "arden", "arlo",
@@ -27,7 +29,7 @@ export const GIVEN_NAMES = [
   "cassidy", "cedar", "cedric", "celeste", "chihiro", "chiyo", "clara", "clay", "cleo", "colette",
   "conrad", "cora", "cove", "cyrus", "dahlia", "daiki", "delia", "delphi", "desmond", "dorian",
   "dove", "eden", "edith", "edmund", "elara", "elio", "ellis", "eloise", "elowen", "ember",
-  "emery", "emi", "emrys", "esme", "ewan", "fable", "felix", "fennec", "ferris", "finch",
+  "emery", "emi", "emrys", "esme", "ewan", "felix", "fennec", "ferris", "finch",
   "flint", "freya", "frida", "frost", "galen", "garnet", "gideon", "gilda", "giselle", "greta",
   "gustav", "hamish", "hana", "harbor", "harlan", "haru", "haruki", "hayato", "hazel", "helena",
   "heron", "hesper", "hikaru", "hinata", "hiro", "hollis", "hugo", "imogen", "indigo", "ines",
@@ -36,12 +38,12 @@ export const GIVEN_NAMES = [
   "kaito", "kaori", "kaoru", "kei", "keiko", "kenji", "kepler", "kestrel", "keziah", "kiku",
   "kira", "lachlan", "lark", "leif", "lennox", "leon", "leonie", "linden", "loam", "lucia",
   "lucian", "luna", "lyra", "mabel", "magda", "magnus", "makoto", "maren", "marisol", "marlow",
-  "mathias", "mei", "merritt", "midori", "mika", "milo", "minoru", "mira", "mistral", "miyu",
+  "mathias", "mei", "merritt", "midori", "mika", "milo", "minoru", "mira", "miyu",
   "morgan", "nadia", "nana", "nao", "naoki", "natsu", "nell", "niamh", "nikolai", "noor",
-  "north", "nova", "nozomi", "oakley", "oberon", "odette", "odile", "onyx", "orion", "osamu",
+  "north", "nozomi", "oakley", "oberon", "odette", "odile", "onyx", "orion", "osamu",
   "oscar", "osric", "otis", "ottilie", "otto", "palmer", "pascal", "perrin", "petra", "philippa",
   "phoenix", "piper", "quentin", "quill", "quinn", "rafferty", "rei", "ren", "rhea", "riku",
-  "rin", "ripley", "river", "roland", "romilly", "ronan", "rosalind", "rowan", "rufus", "ryo",
+  "rin", "ripley", "river", "roland", "romilly", "ronan", "rosalind", "rowan", "ryo",
   "sable", "sage", "sakura", "saskia", "satoshi", "sawyer", "sayuri", "sebastian", "seren", "shea",
   "shion", "shiro", "sibyl", "silas", "sloane", "sora", "soren", "sosuke", "stellan", "sumire",
   "sutton", "suzu", "sylvie", "taiga", "takumi", "talia", "tamsin", "tatsuya", "teal", "tessa",
