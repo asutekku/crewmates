@@ -8,6 +8,7 @@
 
 import { Database } from "bun:sqlite";
 
+import { HandoffStore } from "../handoffs.ts";
 import { LockStore, type Waiter } from "../locks.ts";
 import { WorkStore } from "../work.ts";
 import { DiaryStore } from "../diary.ts";
@@ -93,6 +94,7 @@ export class Store {
   readonly work: WorkStore;
   readonly diary: DiaryStore;
   readonly locks: LockStore;
+  readonly handoffs: HandoffStore;
   readonly questions: QuestionStore;
   readonly obligations: ObligationStore;
 
@@ -115,6 +117,7 @@ export class Store {
     this.work = new WorkStore(db);
     this.diary = new DiaryStore(db);
     this.locks = new LockStore(db);
+    this.handoffs = new HandoffStore(db);
     this.questions = new QuestionStore(db);
     this.obligations = new ObligationStore(db, (input) => this.recordFeatureEvent(input));
   }

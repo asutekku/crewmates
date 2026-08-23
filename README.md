@@ -183,6 +183,10 @@ Co-Authored-By: Aoi (Claude Opus 5) <noreply@anthropic.com>
 
 The block teaches this; `pre-bash` enforces it, **denying** a commit with no trailer or one naming another agent. The `Claude-Session:` trailer is off by default — the link points at a private transcript. See [Design notes](docs/design-notes.md#signing-commits).
 
+## Handoffs
+
+A session that ends with uncommitted files on a branch leaves the next agent there guessing. `crew leaving "hub view half wired; tests red"` records a note for the branch, with the files still dirty; it is injected at the start of the next session on that branch until someone runs `crew handoffs --took <id>`. A session that exits without one, with its edits uncommitted, gets an automatic note naming the files.
+
 ## Locks
 
 Two agents running the full suite, or both starting a dev server on one port, collide without either noticing. A lock is a named, timed claim on the resource:
@@ -277,6 +281,8 @@ Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if 
 | Command | Does |
 |---|---|
 | `note "<title>" --topic <t> [--scope <dir>] [--kind error\|decision]` | file a finding, a bug, or a decision; `note <id>` reads one |
+| `leaving "<what is half-done, what is untested>"` | a note for whoever works this branch next; shown at their start |
+| `handoffs [--took <id>]` | notes left on this branch; --took closes one you picked up |
 | `recall <words> [--scope <dir>] [--limit n]` | search findings |
 | `bugs [--scope <dir>] [--limit n]` | errors nobody has fixed yet |
 | `topics` | every topic, with how much is under it |

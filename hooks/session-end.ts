@@ -8,9 +8,10 @@
  * side-effect only.
  */
 
-import { withStore } from "../core/store.ts";
+import { displayName, withStore } from "../core/store.ts";
+import { unfinishedFiles } from "../cli/handoffs.ts";
 import { readPayload } from "../core/shared.ts";
-import { resolveProject } from "../core/repo.ts";
+import { currentBranch, resolveProject, worktreeRoot } from "../core/repo.ts";
 import { runHook } from "../core/hook.ts";
 
 async function main(): Promise<void> {
@@ -28,6 +29,18 @@ async function main(): Promise<void> {
     const now = Date.now();
     const handle = store.handleFor(sessionId);
     if (handle) store.post(handle, "done", "session ended", now);
+    const self = store.findBySession(sessionId);
+    const tree = worktreeRoot(cwd);
+    const branch = currentBranch(cwd);
+    if (self && !store.handoffs.hasOpen(sessionId, branch)) {
+      const files = unfinishedFiles(store, sessionId, tree, now);
+      if (files.length > 0) {
+        store.handoffs.leave({
+          branch, sessionId, agent: displayName(self), auto: true, nowMs: now, files,
+          text: "left without a handoff note; these edits are uncommitted and untested as far as anyone knows",
+        });
+      }
+    }
     store.unregister(sessionId, now);
   });
 }

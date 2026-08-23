@@ -6,7 +6,7 @@
  * the store and writes nothing, so the inspector cannot join the roster.
  */
 
-import { type Store } from "./store.ts";
+import { agoText, type Store } from "./store.ts";
 import { formatMessages, formatRoster, TRUST_NOTE } from "./shared.ts";
 import { discipleName, nameCase } from "./names.ts";
 import { lineageKey, withPersonal } from "./personal.ts";
@@ -140,6 +140,7 @@ export interface EnvelopeInputs {
   readonly now: number;
   readonly staleness: readonly string[];
   readonly lineageFrom: string;
+  readonly branch?: string;
 }
 
 /**
@@ -277,6 +278,31 @@ export function sessionEnvelope(store: Store, input: EnvelopeInputs): Envelope {
   // COUNTS AND TOPICS, never entries. Session-start context is paid by every
   // agent on every session, and an agent arriving has no file in hand yet — so
   // what it needs is to know the diary EXISTS and roughly what is in it. The
+  // WHAT THE LAST AGENT ON THIS BRANCH LEFT HALF-DONE. Ranked with the roster:
+  // it is about files this session is about to be in.
+  const branch = input.branch ?? "";
+  const left = branch === "" ? [] : store.handoffs.forBranch(branch, sessionId, now);
+  if (left.length > 0) {
+    const lines = left.slice(0, 3).map((h) => {
+      const files = h.files.length > 0 ? ` — uncommitted: ${h.files.slice(0, 5).join(", ")}${h.files.length > 5 ? ` +${h.files.length - 5}` : ""}` : "";
+      return `  #${h.id} ${h.agent} (${agoText(h.tsMs, now)}): ${h.text}${files}`;
+    });
+    add({
+      key: "handoffs",
+      priority: P.roster,
+      text: [
+        `Left on ${branch} by agents who are gone:`,
+        ...lines,
+        "`crew handoffs --took <id>` once you have picked one up, so it stops showing.",
+      ].join("\n"),
+      actionable: true,
+      stateVersion: fingerprint(lines),
+      origin: "peer",
+      requiresPeerFraming: true,
+      compact: `${left.length} handoff note(s) on ${branch} — \`crew handoffs\`.`,
+    });
+  }
+
   // entries themselves arrive at `pre-edit`, when a folder is actually being
   // touched and a specific finding is worth its tokens.
   const topics = store.diary.topics();

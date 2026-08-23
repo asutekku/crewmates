@@ -143,6 +143,8 @@ export const VERBS: readonly Verb[] = [
   // live on the usage line, which prints on an argument error and has room.
   // `--kind` earns its width, being what makes a note a bug or a decision.
   { verb: "note", audience: "agent", args: '"<title>" --topic <t> [--scope <dir>] [--kind error|decision]', blurb: "file a finding, a bug, or a decision; `note <id>` reads one", group: "diary" },
+  { verb: "leaving", audience: "agent", args: '"<what is half-done, what is untested>"', blurb: "a note for whoever works this branch next; shown at their start", group: "diary" },
+  { verb: "handoffs", audience: "shared", args: "[--took <id>]", blurb: "notes left on this branch; --took closes one you picked up", group: "diary" },
   { verb: "recall", audience: "agent", args: "<words> [--scope <dir>] [--limit n]", blurb: "search findings", group: "diary" },
   { verb: "bugs", audience: "agent", args: "[--scope <dir>] [--limit n]", blurb: "errors nobody has fixed yet", group: "diary" },
   { verb: "topics", audience: "agent", args: "", blurb: "every topic, with how much is under it", group: "diary" },

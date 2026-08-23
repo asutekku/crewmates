@@ -24,12 +24,12 @@ A verb an agent is never told about is a verb agents never use — measured, and
 
 | Audience | Count |
 | -------- | ----- |
-| agent | 36 |
+| agent | 37 |
 | human | 14 |
-| shared | 5 |
+| shared | 6 |
 | oversight | 10 |
 
-Derived from `core/verbs.ts` by `test/tools/regen-audiences.ts`; 65 verbs in total. Do not edit between the markers.
+Derived from `core/verbs.ts` by `test/tools/regen-audiences.ts`; 67 verbs in total. Do not edit between the markers.
 
 ## Agent
 
@@ -61,6 +61,7 @@ Reached from an injection, a hook, or another agent's coordination. A human *can
 | `breaks` | record a breaking change; tells agents in the same files |
 | `needs` | record what you are blocked on, and tell them |
 | `note` | file a finding, a bug, or a decision; `note <id>` reads one |
+| `leaving` | a note for whoever works this branch next; shown at their start |
 | `recall` | search findings |
 | `bugs` | errors nobody has fixed yet |
 | `topics` | every topic, with how much is under it |
@@ -106,6 +107,7 @@ Symmetric: both parties do the same thing. The sender is identified from `CLAUDE
 | `msg` | tell one agent something |
 | `locks` | every lock held, by whom, for how much longer |
 | `diff` | a peer's uncommitted changes, limited to files they touched |
+| `handoffs` | notes left on this branch; --took closes one you picked up |
 
 ## Oversight
 

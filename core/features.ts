@@ -3,7 +3,7 @@ export const FEATURES = [
   {id:"roster",label:"roster",helpVerbs:["who","where","whoami","touching","diff","lock","unlock","locks","quit","export"]},
   {id:"messages",label:"messages",helpVerbs:["log","say","msg","clear"]},
   {id:"work",label:"work items",helpVerbs:["doing","did","undo","step","add","done","board","link","plans","mine","breaks","needs"]},
-  {id:"diary",label:"diary findings",helpVerbs:["note","recall","topics","topic","tags","bugs","note-deprecate","note-supersede","diary"]},
+  {id:"diary",label:"diary findings",helpVerbs:["note","recall","topics","topic","tags","bugs","note-deprecate","note-supersede","diary","leaving","handoffs"]},
   {id:"questions",label:"questions",helpVerbs:["asks","answer"]},
   {id:"memories",label:"personal memories",helpVerbs:["remember","about-me","forget","memories"]},
   {id:"lineage",label:"lineage",helpVerbs:["inherit"]},

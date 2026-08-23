@@ -91,6 +91,7 @@ async function main(): Promise<void> {
         now,
         staleness: baseStalenessLines(distance, base, inWorktree),
         lineageFrom: self?.lineageFrom ?? "",
+        branch: self?.branch ?? "",
       }),
       continuing ? store.injectionExposures(sessionId) : new Map(),
     );
