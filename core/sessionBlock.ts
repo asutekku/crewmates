@@ -89,7 +89,9 @@ const HOW_TO_RECORD =
   '"<subject>" --plan "step a; step b; step c"`, ticked off with `crew did <n> ' +
   '"<what changed>"`, and closed with `crew done`. `crew board` shows what ' +
   "every agent is working on. QUICK CHECKS AND ONE-OFF QUESTIONS DO NOT NEED A " +
-  "CHECKLIST — `--plan` is optional and an item with no steps is fine.";
+  "CHECKLIST — `--plan` is optional and an item with no steps is fine. Before a " +
+  "task that spans several files, `crew touching <paths…>` claims them now and tells " +
+  "anyone already in them, instead of waiting for your first write to collide.";
 
 /**
  * WHO THIS SESSION IS, phrased to survive contact with the system prompt.

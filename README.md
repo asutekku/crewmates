@@ -229,6 +229,7 @@ Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if 
 | `obligations [--agent <name>] [--all]` | everything outstanding across the ledger |
 | `clearance <id> [revoke\|expire] [flags]` | inspect, revoke or expire a clearance |
 | `clearances [--all]` | every clearance still in force |
+| `touching <path> [<path>...]` | claim files before editing; whoever holds them is told now |
 | `files <agent> [--hours 24]` | every file an agent has touched, and why |
 | `blame <path>` | who has been in this file, newest first |
 | `sessions <words> [--all] [--limit n]` | find a past conversation by what was said in it, and resume it |

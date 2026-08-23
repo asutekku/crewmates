@@ -1,6 +1,6 @@
 /** Canonical P3 feature identity and surface mappings. */
 export const FEATURES = [
-  {id:"roster",label:"roster",helpVerbs:["who","where","whoami","quit","export"]},
+  {id:"roster",label:"roster",helpVerbs:["who","where","whoami","touching","quit","export"]},
   {id:"messages",label:"messages",helpVerbs:["log","say","msg","clear"]},
   {id:"work",label:"work items",helpVerbs:["doing","did","undo","step","add","done","board","link","plans","mine","breaks","needs"]},
   {id:"diary",label:"diary findings",helpVerbs:["note","recall","topics","topic","tags","bugs","note-deprecate","note-supersede","diary"]},

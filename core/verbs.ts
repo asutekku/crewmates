@@ -95,6 +95,7 @@ export const VERBS: readonly Verb[] = [
   { verb: "obligations", audience: "oversight", args: "[--agent <name>] [--all]", blurb: "everything outstanding across the ledger", group: "presence" },
   { verb: "clearance", audience: "oversight", args: '<id> [revoke|expire] [flags]', blurb: "inspect, revoke or expire a clearance", group: "presence" },
   { verb: "clearances", audience: "oversight", args: "[--all]", blurb: "every clearance still in force", group: "presence" },
+  { verb: "touching", audience: "agent", args: "<path> [<path>...]", blurb: "claim files before editing; whoever holds them is told now", group: "presence" },
   { verb: "files", audience: "human", args: "<agent> [--hours 24]", blurb: "every file an agent has touched, and why", group: "presence" },
   { verb: "blame", audience: "human", args: "<path>", blurb: "who has been in this file, newest first", group: "presence" },
   { verb: "sessions", audience: "human", args: "<words> [--all] [--limit n]", blurb: "find a past conversation by what was said in it, and resume it", group: "presence" },

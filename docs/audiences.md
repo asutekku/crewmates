@@ -24,12 +24,12 @@ A verb an agent is never told about is a verb agents never use — measured, and
 
 | Audience | Count |
 | -------- | ----- |
-| agent | 33 |
+| agent | 34 |
 | human | 14 |
 | shared | 3 |
 | oversight | 10 |
 
-Derived from `core/verbs.ts` by `test/tools/regen-audiences.ts`; 60 verbs in total. Do not edit between the markers.
+Derived from `core/verbs.ts` by `test/tools/regen-audiences.ts`; 61 verbs in total. Do not edit between the markers.
 
 ## Agent
 
@@ -47,6 +47,7 @@ Reached from an injection, a hook, or another agent's coordination. A human *can
 | `correct` | record an explicit typed correction |
 | `hazard` | record a warning independently of obligations |
 | `act` | atomically create a compound structured message |
+| `touching` | claim files before editing; whoever holds them is told now |
 | `doing` | open a work item; --plan is optional |
 | `did` | tick a step off, with what actually changed |
 | `undo` | take a tick back; the step goes outstanding again |
