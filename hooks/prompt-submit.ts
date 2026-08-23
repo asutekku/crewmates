@@ -12,7 +12,7 @@ import { agentKey, progress } from "../core/work.ts";
 import { loadConfig } from "../core/config.ts";
 import { emit, formatMessages, formatRoster, readPayload, TRUST_NOTE } from "../core/shared.ts";
 import { currentBranch, resolveProject, worktreeRoot } from "../core/repo.ts";
-import { topicOf } from "../core/topic.ts";
+import { stripMarkup, topicOf } from "../core/topic.ts";
 import { readTranscript } from "../core/transcript.ts";
 
 
@@ -151,7 +151,7 @@ async function main(): Promise<void> {
       // Only when non-empty: transcripts predating the feature have no title at
       // all, and blanking a good one because today's read came up empty would
       // lose the only description some sessions have.
-      if (title !== "") store.setTitle(sessionId, title);
+      if (title !== "") store.setTitle(sessionId, stripMarkup(title));
     }
 
     // A PLACEHOLDER ROW for an agent that has not opened one itself. The board's

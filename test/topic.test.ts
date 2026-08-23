@@ -117,3 +117,12 @@ describe("topicOf shape", () => {
     expect(out).toContain("optimize");
   });
 });
+
+describe("stripMarkup", () => {
+  test("drops tags and fences but keeps the words", () => {
+    expect(topicOf("<analysis> Chronological walk-through of the hub view")).toBe(
+      "Chronological walk-through of the hub view",
+    );
+    expect(topicOf("```ts\nfix the lane merge logic\n```")).toBe("fix the lane merge logic");
+  });
+});

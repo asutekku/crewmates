@@ -18,6 +18,8 @@ export interface WhoamiWork {
   readonly subject: string;
   readonly stepsDone: number;
   readonly stepsTotal: number;
+  /** Opened from the conversation title, not by the agent. */
+  readonly auto: boolean;
 }
 
 /** Everything a statusline or script can know about one session, in one read. */
@@ -81,7 +83,7 @@ export function collectWhoami(
     behindBase: self.behindBase,
     doing:
       latest && steps
-        ? { subject: latest.subject, stepsDone: steps.done, stepsTotal: steps.total }
+        ? { subject: latest.subject, stepsDone: steps.done, stepsTotal: steps.total, auto: latest.auto }
         : null,
     editing: files[0] ?? "",
     files,

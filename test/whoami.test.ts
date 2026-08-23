@@ -51,7 +51,7 @@ describe("collectWhoami", () => {
       expect(me.label).toContain("Vega");
       expect(me.role).toBe("Tooling Master");
       expect(me.branch).toBe("master");
-      expect(me.doing).toEqual({ subject: "Fix the fade", stepsDone: 0, stepsTotal: 3 });
+      expect(me.doing).toEqual({ subject: "Fix the fade", stepsDone: 0, stepsTotal: 3, auto: false });
       expect(me.editing).toBe("src/b.ts");
       expect(me.files).toEqual(["src/b.ts", "src/a.ts"]);
       expect(me.contested).toEqual(["src/b.ts"]);

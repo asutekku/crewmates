@@ -33,7 +33,7 @@ From a hook the session is known through `CLAUDE_CODE_SESSION_ID`. The statuslin
 | `blocked` | string | the prompt text while `waiting` |
 | `worktree`, `branch` | string | where the session is |
 | `baseBranch`, `behindBase` | string, number | drift from the base ref; `behindBase` is `-1` until sampled |
-| `doing` | object \| null | the open work item: `subject`, `stepsDone`, `stepsTotal` |
+| `doing` | object \| null | the open work item: `subject`, `stepsDone`, `stepsTotal`, `auto` (true when guessed from the conversation title) |
 | `editing` | string | the path most recently claimed by an edit, within the claim TTL |
 | `files` | string[] | every path claimed within the TTL, newest first |
 | `contested` | string[] | paths in `files` another live agent also holds |

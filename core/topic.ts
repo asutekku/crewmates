@@ -142,8 +142,17 @@ const PASTED_OUTPUT = new RegExp(
   ].join("|"),
 );
 
+/** Drops `<tag>` markup and code fences, which name a format rather than a task. */
+export function stripMarkup(text: string): string {
+  return text
+    .replace(/<\/?[a-zA-Z][\w:-]*(?:\s[^<>]*)?>/g, " ")
+    .replace(/```[a-zA-Z]*/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function summarize(text: string, maxLen: number): string {
-  const flat = text.replace(/\s+/g, " ").trim();
+  const flat = stripMarkup(text);
   if (flat.length <= maxLen) return flat;
   return `${flat.slice(0, maxLen - 1)}…`;
 }

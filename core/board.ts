@@ -123,7 +123,7 @@ export function itemLines(
   const p = progress(steps);
   const open = item.closedMs === 0;
   const marker = open ? paint.cyan("▸") : paint.green("✓");
-  const countText = p.total > 0 ? `  ${p.done}/${p.total}` : "";
+  const countText = p.total > 0 ? `  ${p.done}/${p.total}` : item.auto ? "  (guessed)" : "";
   const count = paint.dim(countText);
   const age = open
     ? `${briefAge(item.startedMs, nowMs)} · updated ${briefAge(item.updatedMs, nowMs)}`
