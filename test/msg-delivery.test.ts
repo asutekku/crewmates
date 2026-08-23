@@ -35,6 +35,7 @@ function recipient(silentMinutes: number, status = ""): Session {
     name: "traffic-1",
     alias: "alder",
     role: "",
+    persona: "",
     status,
     blocked: "",
     worktree: "/tree",

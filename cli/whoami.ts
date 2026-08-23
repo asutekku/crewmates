@@ -28,6 +28,7 @@ export interface Whoami {
   readonly name: string;
   readonly label: string;
   readonly role: string;
+  readonly persona: string;
   readonly handle: string;
   readonly lineageFrom: string;
   readonly state: AgentState;
@@ -73,6 +74,7 @@ export function collectWhoami(
     name: displayName(self),
     label: rosterName(self),
     role: self.role,
+    persona: self.persona,
     handle: self.handle,
     lineageFrom: self.lineageFrom,
     state: agentState(self, nowMs),

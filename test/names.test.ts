@@ -297,7 +297,7 @@ describe("a rename does not leave the old name as a job title", () => {
     // handle, so the handle-as-topic fallback printed the name just abandoned.
     const s = {
       sessionId: "s", handle: "adela", name: "traffic-1", alias: "hopper",
-      role: "", status: "", blocked: "", worktree: "/t", branch: "main",
+      role: "", persona: "", status: "", blocked: "", worktree: "/t", branch: "main",
       behindBase: -1, baseBranch: "", lineageFrom: "", intent: "", title: "",
       summary: "", summaryMs: 0, lastSeenMs: 0, lastTurnMs: 0, startedMs: 0,
     };
@@ -308,7 +308,7 @@ describe("a rename does not leave the old name as a job title", () => {
     // The fallback earns its place in the ordinary case and must survive.
     const s = {
       sessionId: "s", handle: "water-dynamic", name: "traffic-2", alias: "",
-      role: "", status: "", blocked: "", worktree: "/t", branch: "main",
+      role: "", persona: "", status: "", blocked: "", worktree: "/t", branch: "main",
       behindBase: -1, baseBranch: "", lineageFrom: "", intent: "", title: "",
       summary: "", summaryMs: 0, lastSeenMs: 0, lastTurnMs: 0, startedMs: 0,
     };
@@ -318,7 +318,7 @@ describe("a rename does not leave the old name as a job title", () => {
   test("an explicit role always wins, aliased or not", () => {
     const s = {
       sessionId: "s", handle: "adela", name: "traffic-3", alias: "hopper",
-      role: "Tooling Master", status: "", blocked: "", worktree: "/t",
+      role: "Tooling Master", persona: "", status: "", blocked: "", worktree: "/t",
       branch: "main", behindBase: -1, baseBranch: "", lineageFrom: "",
       intent: "", title: "", summary: "", summaryMs: 0, lastSeenMs: 0,
       lastTurnMs: 0, startedMs: 0,

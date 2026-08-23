@@ -49,6 +49,8 @@ export interface CrewFile {
   readonly codegen: readonly CodegenPair[];
   /** Lock name → regex over a shell command. `tests` defaults to `checks.test`. */
   readonly locks: Readonly<Record<string, string>>;
+  /** "" (off), "random", or a persona id every session in this repo takes. */
+  readonly persona: string;
   /** Only valid PresenceConfig keys with finite positive values survive parsing. */
   readonly tunables: Partial<PresenceConfig>;
   /** Top-level keys that are neither schema nor reserved. Kept for `--check`. */
@@ -71,6 +73,7 @@ const SCHEMA_KEYS = new Set([
   "commit",
   "codegen",
   "locks",
+  "persona",
   "tunables",
 ]);
 
@@ -93,6 +96,7 @@ export const EMPTY_CREWFILE: CrewFile = {
   commit: DEFAULT_COMMIT,
   codegen: [],
   locks: {},
+  persona: "",
   tunables: {},
   unknownKeys: [],
   reservedKeys: [],
@@ -190,6 +194,7 @@ export function parseCrewFile(raw: unknown): CrewFile {
     commit: parseCommit(o["commit"]),
     codegen: parseCodegen(o["codegen"]),
     locks: parseLocks(o["locks"], parseChecks(o["checks"])),
+    persona: stringField(o["persona"]).trim().toLowerCase(),
     tunables: parseTunables(o["tunables"]),
     unknownKeys: keys.filter(
       (k) => !SCHEMA_KEYS.has(k) && !(RESERVED_KEYS as readonly string[]).includes(k),

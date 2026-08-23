@@ -259,6 +259,9 @@ export class Store {
   setRole(sessionId: string, role: string): void {
     this.sessions.setRole(sessionId, role);
   }
+  setPersona(sessionId: string, persona: string): void {
+    this.sessions.setPersona(sessionId, persona);
+  }
   setTitle(sessionId: string, title: string): void {
     this.sessions.setTitle(sessionId, title);
   }

@@ -10,6 +10,7 @@ function session(name: string, handle: string, alias = ""): Session {
     handle,
     alias,
     role: "",
+    persona: "",
     status: "idle",
     blocked: "",
     worktree: "",

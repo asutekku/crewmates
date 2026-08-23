@@ -6,6 +6,7 @@
  * the store and writes nothing, so the inspector cannot join the roster.
  */
 
+import { personaById, personaLines } from "./personas.ts";
 import { agoText, type Store } from "./store.ts";
 import { formatMessages, formatRoster, TRUST_NOTE } from "./shared.ts";
 import { discipleName, nameCase } from "./names.ts";
@@ -141,6 +142,7 @@ export interface EnvelopeInputs {
   readonly staleness: readonly string[];
   readonly lineageFrom: string;
   readonly branch?: string;
+  readonly persona?: string;
 }
 
 /**
@@ -166,6 +168,8 @@ export function sessionEnvelope(store: Store, input: EnvelopeInputs): Envelope {
   // own reading of `git log`, both mean something different in a checkout 500
   // commits adrift. Empty on the common path.
   if (input.staleness.length > 0) header.push(...input.staleness);
+  const persona = personaById(input.persona ?? "");
+  if (persona) header.push("", ...personaLines(persona));
 
   const candidates: InjectionCandidate[] = [];
   const add = (c: Omit<InjectionCandidate, "dedupeKey"> & { dedupeKey?: string }): void => {

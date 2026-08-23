@@ -67,6 +67,8 @@ export interface Session {
   readonly handle: string;
   /** What the agent is FOR: "Tooling Master". Shown to peers as well. */
   readonly role: string;
+  /** A voice from `core/personas.ts`, or "". Tone only. */
+  readonly persona: string;
   /**
    * ITS OWN COLUMN, not a write into `name`: `syncAgents` overwrites `name`
    * wholesale on every roster read, so a chosen name there would revert.

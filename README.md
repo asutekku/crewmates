@@ -199,6 +199,10 @@ crew locks
 
 `tests` locks itself: `pre-bash` takes it when a command matches `checks.test` in `crew.json` and drops it when the command ends. Other resources come from `crew.json`'s `locks` map, lock name to a regex over the command (`"dev": "vite|next dev"`). A second agent that runs the command or asks for the lock is warned, queued, and messaged when the lock is released or expires. Like every other signal here it is advisory: nothing is blocked, and a message reaches a session at its next hook — an idle one reads it when it is next prompted.
 
+## Personas
+
+Purely optional. `crew persona` lists ten voices — Disgruntled Professional, Eager Tryhard, Discord Kitten, Noir Detective, Pirate, Butler, Gremlin, Sports Coach, Bard, Lab Notebook. `crew persona gremlin` takes one, `crew persona random` rolls, `crew persona off` drops it; `"persona": "random"` in `.claude/crew.json` gives every new session in the repo one. It is injected in the session header as tone only: the work, commit rules and CLAUDE.md stand exactly as they would without it, and the agent is told to drop it when asked. Useful for telling eight windows apart by ear.
+
 ## Statusline
 
 `crew whoami` prints this session's name; `--session <id>` takes the `session_id` Claude Code pipes to a statusline command, and `--json` adds state, open work, the file being edited and unread mail.
@@ -309,6 +313,7 @@ Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if 
 | `whoami [--json] [--session <id>]` | this session's name; --json adds state, work, files, peers |
 | `call-me <name> [--agent <who>]` | take a different name; peers type it at msg |
 | `set-role "<role>" [--agent <who>]` | set your role: Keeper of Wet Things |
+| `persona [<id> \| random \| off] [--agent <who>]` | a voice to talk in; tone only, bare lists them |
 | `release [--agent <who>]` | give up your name so a successor can take it |
 
 <!-- END GENERATED COMMANDS -->

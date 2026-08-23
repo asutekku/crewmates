@@ -63,7 +63,7 @@ describe("roster layout", () => {
 
   test("renderer sanitizes before fitting and is deterministic", () => {
     const session: Session = {
-      sessionId: "s1", handle: "ada", name: "ada", alias: "", role: "",
+      sessionId: "s1", handle: "ada", name: "ada", alias: "", role: "", persona: "",
       status: "busy", blocked: "blocked\nspoof", worktree: "/project", branch: "main",
       behindBase: 0, baseBranch: "main", lineageFrom: "", intent: "",
       title: "task\u001b]8;;https://evil.test\u0007", summary: "safe\u001b[31m",
@@ -140,7 +140,7 @@ describe("the overlap a shared tree exists to create", () => {
 describe("every agent is under a named tree", () => {
   function session(handle: string, worktree: string, branch: string): Session {
     return {
-      sessionId: `s-${handle}`, handle, name: handle, alias: "", role: "",
+      sessionId: `s-${handle}`, handle, name: handle, alias: "", role: "", persona: "",
       status: "", blocked: "", worktree, branch, behindBase: -1, baseBranch: "",
       lineageFrom: "", intent: "", title: "", summary: "", summaryMs: 0,
       lastSeenMs: 1000, lastTurnMs: 0, startedMs: 0,

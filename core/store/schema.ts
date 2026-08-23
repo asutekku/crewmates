@@ -29,6 +29,7 @@ const COLUMN_MIGRATIONS = [
   // When the last write-shaped Bash command began, so post-bash can tell which
   // dirty files that command produced.
   ["sessions", "bash_started_ms", "INTEGER NOT NULL DEFAULT 0"],
+  ["sessions", "persona", "TEXT NOT NULL DEFAULT ''"],
   // When this CONVERSATION last ended a turn. The `done` message says the same
   // thing but is keyed by handle, and handles are reused — a session inherits
   // the turn ends of whoever held its name before. Keyed here, it cannot.

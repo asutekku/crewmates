@@ -22,6 +22,8 @@ import { listAgents } from "../core/agents.ts";
 import { nameCase } from "../core/names.ts";
 import { isContinuation, pack, renderBlock } from "../core/injection.ts";
 import { loadConfig } from "../core/config.ts";
+import { loadCrewFile } from "../core/crewfile.ts";
+import { personaById, randomPersona } from "../core/personas.ts";
 import { sessionEnvelope } from "../core/sessionBlock.ts";
 
 // Re-exported because the identity wording is the tested part and its tests
@@ -71,6 +73,18 @@ async function main(): Promise<void> {
     const self = store.liveSessions(now).find((s) => s.sessionId === sessionId);
     const me = self ? displayName(self) : handle;
 
+    // A repo-wide persona is taken once, at first start; `crew persona` can
+    // change or drop it afterwards and that choice sticks.
+    let persona = self?.persona ?? "";
+    const wanted = loadCrewFile(project.root).persona;
+    if (self && persona === "" && wanted !== "") {
+      const chosen = wanted === "random" ? randomPersona(sessionId) : personaById(wanted);
+      if (chosen) {
+        persona = chosen.id;
+        store.setPersona(sessionId, persona);
+      }
+    }
+
     // SUPPRESSION IS ONLY REAL IF IT IS PERSISTED. `pack` defaults `seen` to an
     // empty map, so a caller that omits it silently gets no suppression while
     // every unit test still passes.
@@ -92,6 +106,7 @@ async function main(): Promise<void> {
         staleness: baseStalenessLines(distance, base, inWorktree),
         lineageFrom: self?.lineageFrom ?? "",
         branch: self?.branch ?? "",
+        persona,
       }),
       continuing ? store.injectionExposures(sessionId) : new Map(),
     );

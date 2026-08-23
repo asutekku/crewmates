@@ -65,6 +65,7 @@ Four folders by role: `hooks/` is the event surface, `core/` is shared domain co
 | `names.ts`            | The given-name pool, and the two casers (prose role vs typeable name).                                                                    |
 | `bashEdits.ts`        | Read-only command detection, and dirty files changed since a timestamp.                                                                   |
 | `handoffs.ts`         | Branch-scoped notes a departing session leaves for the next one.                                                                         |
+| `personas.ts`         | Optional voices an agent can talk in; tone only, injected in the session header.                                                          |
 | `locks.ts`            | Named, time-limited resource locks with a wait list; expiry is swept on hooks.                                                            |
 | `dirty.ts`            | Uncommitted files, for the roster's "what is in flight" line.                                                                             |
 | `config.ts`           | Tunables — staleness windows, how much of the board to show.                                                                              |
@@ -103,6 +104,7 @@ Four folders by role: `hooks/` is the event surface, `core/` is shared domain co
 | `structured-json.ts`   | Complete unknown-to-domain decoder for structured JSON batches.                     |
 | `admin.ts`             | Naming, roles, project location, roster clearing, and deregistration.               |
 | `handoffs.ts`          | `leaving`, `handoffs`; `unfinishedFiles` is shared with session-end.                |
+| `persona.ts`           | `persona`: list, take, roll or drop a voice.                                        |
 | `locks.ts`             | `lock`, `unlock`, `locks`.                                                          |
 | `diff.ts`              | A peer's claimed paths as `git diff HEAD` in their worktree.                        |
 | `touching.ts`          | Claim paths by intent, before the first write; holders are messaged.                |

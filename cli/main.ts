@@ -16,6 +16,7 @@ import { createInjectionCommands } from "./injection.ts";
 import { createLockCommands } from "./locks.ts";
 import { createMessagingCommands } from "./messaging.ts";
 import { createObligationCommands } from "./obligations.ts";
+import { createPersonaCommands } from "./persona.ts";
 import { createPersonalCommands } from "./personal.ts";
 import { createQuestionCommands } from "./questions.ts";
 import { CommandRegistry } from "./registry.ts";
@@ -41,6 +42,7 @@ const COMMAND_FAMILIES: readonly CommandFactory[] = [
   createDiffCommands,
   createLockCommands,
   createHandoffCommands,
+  createPersonaCommands,
   createDiagnosticCommands,
   createInjectionCommands,
   createInitCommands,

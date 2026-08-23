@@ -5,13 +5,13 @@ import { liveConversations, OwnershipStore } from "./ownership.ts";
 
 export const SESSION_COLUMNS = `session_id, handle, name, alias, role, status, blocked, worktree, branch,
   behind_base, base_branch, lineage_from, intent, title, summary, summary_ms, last_seen_ms, started_ms,
-  last_turn_ms`;
+  last_turn_ms, persona`;
 
 export function rowToSession(row: Record<string, string | number>): Session {
   return {
     sessionId: String(row["session_id"]), handle: String(row["handle"]),
     name: String(row["name"] ?? ""), alias: String(row["alias"] ?? ""),
-    role: String(row["role"] ?? ""), status: String(row["status"]),
+    role: String(row["role"] ?? ""), persona: String(row["persona"] ?? ""), status: String(row["status"]),
     blocked: String(row["blocked"]), worktree: String(row["worktree"]),
     branch: String(row["branch"]), behindBase: Number(row["behind_base"] ?? -1),
     baseBranch: String(row["base_branch"] ?? ""), lineageFrom: String(row["lineage_from"] ?? ""),
@@ -253,6 +253,10 @@ export class SessionStore {
 
   setRole(sessionId: string, role: string): void {
     this.db.query(`UPDATE sessions SET role = ? WHERE session_id = ?`).run(role, sessionId);
+  }
+
+  setPersona(sessionId: string, persona: string): void {
+    this.db.query(`UPDATE sessions SET persona = ? WHERE session_id = ?`).run(persona, sessionId);
   }
 
   setTitle(sessionId: string, title: string): void {

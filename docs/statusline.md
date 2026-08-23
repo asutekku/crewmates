@@ -27,6 +27,7 @@ From a hook the session is known through `CLAUDE_CODE_SESSION_ID`. The statuslin
 | `name` | string | what peers type at `msg` — lowercase, one token |
 | `label` | string | the roster spelling: capitalised, with lineage and role |
 | `role` | string | from `set-role`; `""` when unset |
+| `persona` | string | persona id from `crew persona`; `""` when off |
 | `handle` | string | the pool-issued name, under any alias |
 | `lineageFrom` | string | agent whose knowledge was taken up with `inherit`; `""` otherwise |
 | `state` | `busy` \| `idle` \| `waiting` \| `gone` | derived from heartbeat and turn end; `waiting` means a permission prompt is open |

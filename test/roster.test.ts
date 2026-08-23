@@ -22,7 +22,7 @@ function session(over: Partial<Session> = {}): Session {
     handle: "ada",
     name: "traffic-4b",
     alias: "",
-    role: "",
+    role: "", persona: "",
     status: "busy",
     blocked: "",
     worktree: "I:/Projects/Traffic",
