@@ -11,6 +11,7 @@
 import { readFileSync } from "node:fs";
 import { isAbsolute } from "node:path";
 
+import { looksReadOnly } from "../core/bashEdits.ts";
 import { loadCrewFile, type CrewFile } from "../core/crewfile.ts";
 import { resolveProject } from "../core/repo.ts";
 import { emit, readPayload } from "../core/shared.ts";
@@ -269,15 +270,18 @@ async function main(): Promise<void> {
   const warning = checkTestPolicy(command, crew);
   if (warning !== "") emit("PreToolUse", warning, "presence: crew.json testPolicy is scoped-only");
 
+  const sessionId = payload?.session_id;
+  if (sessionId && !looksReadOnly(command)) {
+    withStore(project.dbPath, (store) => store.markBashStart(sessionId, Date.now()));
+  }
+
   // Guarded by the cheap regex FIRST: the db open and the message read must not
   // sit on every `ls` this hook already sees.
   if (!crew.commit.sign || !GIT_COMMIT.test(command)) return;
   const message = commitMessage(command, (p) =>
     readFileSync(isAbsolute(p) ? p : `${cwd}/${p}`, "utf8"),
   );
-  if (message.trim() === "") return;
-  const sessionId = payload?.session_id;
-  if (!sessionId) return;
+  if (message.trim() === "" || !sessionId) return;
   const me = withStore(project.dbPath, (store) => {
     const self = store.findBySession(sessionId);
     return self ? lineageName(self) : "";

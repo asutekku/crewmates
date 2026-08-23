@@ -131,6 +131,17 @@ export class SessionStore {
     ).all(nowMs - this.staleMs) as Array<Record<string, string | number>>).map(rowToSession);
   }
 
+  markBashStart(sessionId: string, nowMs: number): void {
+    this.db.query(`UPDATE sessions SET bash_started_ms = ?, last_seen_ms = ? WHERE session_id = ?`)
+      .run(nowMs, nowMs, sessionId);
+  }
+
+  bashStartedMs(sessionId: string): number {
+    const row = this.db.query(`SELECT bash_started_ms FROM sessions WHERE session_id = ?`)
+      .get(sessionId) as { bash_started_ms: number } | null;
+    return Number(row?.bash_started_ms ?? 0);
+  }
+
   /** Heartbeat. Clears `blocked` too: a session doing something is not stuck. */
   touch(sessionId: string, nowMs: number): void {
     this.db.query(`UPDATE sessions SET last_seen_ms = ?, blocked = '' WHERE session_id = ?`)

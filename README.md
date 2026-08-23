@@ -52,7 +52,7 @@ The overlap is `crew msg`, one verb. Four differences carry the rest:
 
 **Presence is pushed, not pulled.** `/list-agents` is a tool Claude runs when it decides to, which means it usually doesn't — and an agent that has to _choose_ to look for peers starts editing first. Crewmates puts the roster in the context at session start, through hooks, before there is any reason to ask.
 
-**It watches paths, not just names.** The listing gives you a session's working directory. Crewmates knows which files each agent has claimed and warns the one about to write to a claimed path, at the moment of the write. Nobody has to notice the collision for it to be caught.
+**It watches paths, not just names.** The listing gives you a session's working directory. Crewmates knows which files each agent has claimed and warns the one about to write to a claimed path, at the moment of the write. Shell edits count too: a heredoc or `sed -i` is claimed after the command runs, from what `git status` says changed. Nobody has to notice the collision for it to be caught.
 
 **It outlives the session.** A message needs a live recipient. `crew note "WAL needs the dir writable" --scope core/store` surfaces for whoever edits `core/store/` next month, in any worktree, long after every session here has exited. That is what a channel structurally cannot do.
 

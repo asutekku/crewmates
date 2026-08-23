@@ -23,6 +23,7 @@ Four folders by role: `hooks/` is the event surface, `core/` is shared domain co
 | `subagent-start.ts` | **SubagentStart** — tells a subagent what peers hold.                     |
 | `subagent-stop.ts`  | **SubagentStop** — closes the minion out, so the count is live.           |
 | `commit-landed.ts`  | **PostToolUse(Bash)** — reads git's own output; records the sha.          |
+| `post-bash.ts`      | **PostToolUse(Bash)** — claims files the command changed (mtime + git status). |
 | `compacted.ts`      | **PostCompact** — refreshes intent from the compaction summary.           |
 | `cwd-changed.ts`    | **CwdChanged** — keeps worktree/branch true after a `cd`.                 |
 | `task-changed.ts`   | **TaskCreated/Completed** — mirrors per-session tasks to a shared board.  |

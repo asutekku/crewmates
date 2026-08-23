@@ -165,6 +165,8 @@ const REGISTRATIONS: ReadonlyArray<readonly [string, unknown]> = [
   // Commits, for the work board. Matched to Bash so an Edit never pays for it,
   // and it emits nothing back — the agent knows it just committed.
   ["PostToolUse", { matcher: "Bash", ...(entry("commit-landed.ts") as object) }],
+  // Files a shell command changed, so heredoc and sed edits are claimed too.
+  ["PostToolUse", { matcher: "Bash", ...(entry("post-bash.ts") as object) }],
   ["Stop", entry("turn-end.ts")],
   // Runs INSTEAD OF Stop when a turn dies, which is why it cannot be folded in.
   ["StopFailure", entry("turn-failed.ts")],

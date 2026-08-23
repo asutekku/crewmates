@@ -165,6 +165,12 @@ export class Store {
   register(sessionId: string, worktree: string, branch: string, nowMs: number): string {
     return this.sessions.register(sessionId, worktree, branch, nowMs);
   }
+  markBashStart(sessionId: string, nowMs: number): void {
+    this.sessions.markBashStart(sessionId, nowMs);
+  }
+  bashStartedMs(sessionId: string): number {
+    return this.sessions.bashStartedMs(sessionId);
+  }
   touch(sessionId: string, nowMs: number): void {
     this.sessions.touch(sessionId, nowMs);
   }
