@@ -100,6 +100,7 @@ Four folders by role: `hooks/` is the event surface, `core/` is shared domain co
 | `structured.ts`        | Pure parser for single-act structured-message shortcuts.                            |
 | `structured-json.ts`   | Complete unknown-to-domain decoder for structured JSON batches.                     |
 | `admin.ts`             | Naming, roles, project location, roster clearing, and deregistration.               |
+| `diff.ts`              | A peer's claimed paths as `git diff HEAD` in their worktree.                        |
 | `touching.ts`          | Claim paths by intent, before the first write; holders are messaged.                |
 | `whoami.ts`            | One session's identity, state, work and files as text or JSON, for statuslines.     |
 | `diagnostics.ts`       | Edit history and store statistics.                                                  |

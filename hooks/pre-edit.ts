@@ -339,9 +339,9 @@ async function main(): Promise<void> {
     if (others.length > 0) {
       const first = claimName(others[0] as Claim);
       lines.push(
-        `Before asking, look: \`crew files ${first}\` ` +
-          `lists every file they have touched and what they say they are doing; ` +
-          `\`crew blame ${path}\` shows who has been in this one. If that leaves a ` +
+        `Before asking, look: \`crew diff ${first}\` shows their uncommitted changes, ` +
+          `\`crew files ${first}\` lists every file they have touched and what they say ` +
+          `they are doing; \`crew blame ${path}\` shows who has been in this one. If that leaves a ` +
           `real question, \`crew msg ${first} "<text>"\` reaches them — what each of ` +
           `you is changing, and which parts are load-bearing, is knowledge the ` +
           `other cannot derive from the file.`,

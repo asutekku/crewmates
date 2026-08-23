@@ -26,10 +26,10 @@ A verb an agent is never told about is a verb agents never use — measured, and
 | -------- | ----- |
 | agent | 34 |
 | human | 14 |
-| shared | 3 |
+| shared | 4 |
 | oversight | 10 |
 
-Derived from `core/verbs.ts` by `test/tools/regen-audiences.ts`; 61 verbs in total. Do not edit between the markers.
+Derived from `core/verbs.ts` by `test/tools/regen-audiences.ts`; 62 verbs in total. Do not edit between the markers.
 
 ## Agent
 
@@ -102,6 +102,7 @@ Symmetric: both parties do the same thing. The sender is identified from `CLAUDE
 | `log` | recent messages from every agent |
 | `say` | tell every agent something |
 | `msg` | tell one agent something |
+| `diff` | a peer's uncommitted changes, limited to files they touched |
 
 ## Oversight
 

@@ -231,6 +231,7 @@ Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if 
 | `clearances [--all]` | every clearance still in force |
 | `touching <path> [<path>...]` | claim files before editing; whoever holds them is told now |
 | `files <agent> [--hours 24]` | every file an agent has touched, and why |
+| `diff <agent> [--stat] [--hours n]` | a peer's uncommitted changes, limited to files they touched |
 | `blame <path>` | who has been in this file, newest first |
 | `sessions <words> [--all] [--limit n]` | find a past conversation by what was said in it, and resume it |
 | `quit <name> [--force]` | drop a session off the roster; no liveness check |
