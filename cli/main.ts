@@ -19,6 +19,7 @@ import { CommandRegistry } from "./registry.ts";
 import { createRosterCommands } from "./roster.ts";
 import { createSessionCommands } from "./sessions.ts";
 import type { CliContext, CommandFactory } from "./types.ts";
+import { createWhoamiCommands } from "./whoami.ts";
 import { createWorkCommands } from "./work.ts";
 
 const COMMAND_FAMILIES: readonly CommandFactory[] = [
@@ -31,6 +32,7 @@ const COMMAND_FAMILIES: readonly CommandFactory[] = [
   createRosterCommands,
   createSessionCommands,
   createAdminCommands,
+  createWhoamiCommands,
   createDiagnosticCommands,
   createInjectionCommands,
   createInitCommands,

@@ -10,7 +10,7 @@
 [![Claude Code](https://img.shields.io/badge/for-Claude%20Code-d97757.svg?style=flat-square)](https://claude.com/claude-code)
 [![Platforms](https://img.shields.io/badge/windows%20%C2%B7%20macos%20%C2%B7%20linux-555.svg?style=flat-square)](#install)
 
-[Install](#install) · [Usage](#usage) · [Views](docs/views.md) · [Audiences](docs/audiences.md) · [Naming](docs/naming.md) · [Operating](docs/operating.md) · [Internals](docs/internals.md) · [Design notes](docs/design-notes.md)
+[Install](#install) · [Usage](#usage) · [Views](docs/views.md) · [Statusline](docs/statusline.md) · [Audiences](docs/audiences.md) · [Naming](docs/naming.md) · [Operating](docs/operating.md) · [Internals](docs/internals.md) · [Design notes](docs/design-notes.md)
 
 </div>
 
@@ -183,6 +183,20 @@ Co-Authored-By: Aoi (Claude Opus 5) <noreply@anthropic.com>
 
 The block teaches this; `pre-bash` enforces it, **denying** a commit with no trailer or one naming another agent. The `Claude-Session:` trailer is off by default — the link points at a private transcript. See [Design notes](docs/design-notes.md#signing-commits).
 
+## Statusline
+
+`crew whoami` prints this session's name; `--session <id>` takes the `session_id` Claude Code pipes to a statusline command, and `--json` adds state, open work, the file being edited and unread mail.
+
+```sh
+#!/bin/sh
+input=$(cat)
+sid=$(printf '%s' "$input" | jq -r .session_id)
+dir=$(printf '%s' "$input" | jq -r .workspace.current_dir)
+printf '%s  %s' "$(cd "$dir" && crew whoami --session "$sid" 2>/dev/null)" "$(basename "$dir")"
+```
+
+Point `statusLine.command` in `~/.claude/settings.json` at it. Fields and a fuller example: [Statusline](docs/statusline.md).
+
 ## Commands
 
 Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if a verb is dispatched without appearing here.
@@ -191,87 +205,88 @@ Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if 
 
 ### Who is here
 
-| Command                                                                   | Does                                                           |
-| ------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `who [--raw]`                                                             | the roster: who is live, on what, where                        |
-| `log [n] [--raw]`                                                         | recent messages from every agent                               |
-| `say <text>`                                                              | tell every agent something                                     |
-| `msg <name> "<text>" [--from <name>]`                                     | tell one agent something                                       |
-| `where`                                                                   | this session's repo, worktree, branch and drift from base      |
-| `stats`                                                                   | what the store holds, over how large a sample                  |
-| `injection [--agent <name> \| --session <id>]`                            | what session start puts in context, and what it left out       |
-| `inbox [--agent <name> \| --session <id>]`                                | items omitted from your context for length                     |
-| `ask <name> "<question>"`                                                 | ask a peer something and record that a reply is owed           |
-| `answer <id> "<answer>"`                                                  | answer a question asked of you (id from `asks`)                |
-| `asks`                                                                    | questions waiting on you, and what you are waiting for         |
-| `request <name> "<text>"`                                                 | record a proposed obligation for a peer                        |
-| `promise <name> "<text>" [--refrain --until 4h\|<text>]`                  | bind yourself to perform or refrain                            |
-| `handoff <name> "<subject>"`                                              | propose moving responsibility to a peer                        |
-| `grant <name> "<scope>"`                                                  | grant explicit clearance over opaque scope text                |
-| `correct <name> <self\|peer\|implementation> "<text>"`                    | record an explicit typed correction                            |
-| `hazard <name> "<subject>" "<warning>"`                                   | record a warning independently of obligations                  |
-| `act <name> --json <file>`                                                | atomically create a compound structured message                |
-| `obligation <id> [event] [flags]`                                         | inspect or append a versioned obligation event                 |
-| `obligations [--agent <name>] [--all]`                                    | everything outstanding across the ledger                       |
-| `clearance <id> [revoke\|expire] [flags]`                                 | inspect, revoke or expire a clearance                          |
-| `clearances [--all]`                                                      | every clearance still in force                                 |
-| `files <agent> [--hours 24]`                                              | every file an agent has touched, and why                       |
-| `blame <path>`                                                            | who has been in this file, newest first                        |
-| `sessions <words> [--all] [--limit n]`                                    | find a past conversation by what was said in it, and resume it |
-| `quit <name> [--force]`                                                   | drop a session off the roster; no liveness check               |
-| `clear [--force]`                                                         | wipe the roster and claims; the log is kept                    |
-| `export [path]`                                                           | copy the store somewhere safe before anything destructive      |
-| `init [--check [--repo]] [--test-policy <p>] [--base-ref <ref>] [--sign]` | set this repo up: crew.json, the CLAUDE.md block, settings     |
-| `help`                                                                    | this list                                                      |
+| Command | Does |
+|---|---|
+| `who [--raw]` | the roster: who is live, on what, where |
+| `log [n] [--raw]` | recent messages from every agent |
+| `say <text>` | tell every agent something |
+| `msg <name> "<text>" [--from <name>]` | tell one agent something |
+| `where` | this session's repo, worktree, branch and drift from base |
+| `stats` | what the store holds, over how large a sample |
+| `injection [--agent <name> \| --session <id>]` | what session start puts in context, and what it left out |
+| `inbox [--agent <name> \| --session <id>]` | items omitted from your context for length |
+| `ask <name> "<question>"` | ask a peer something and record that a reply is owed |
+| `answer <id> "<answer>"` | answer a question asked of you (id from `asks`) |
+| `asks` | questions waiting on you, and what you are waiting for |
+| `request <name> "<text>"` | record a proposed obligation for a peer |
+| `promise <name> "<text>" [--refrain --until 4h\|<text>]` | bind yourself to perform or refrain |
+| `handoff <name> "<subject>"` | propose moving responsibility to a peer |
+| `grant <name> "<scope>"` | grant explicit clearance over opaque scope text |
+| `correct <name> <self\|peer\|implementation> "<text>"` | record an explicit typed correction |
+| `hazard <name> "<subject>" "<warning>"` | record a warning independently of obligations |
+| `act <name> --json <file>` | atomically create a compound structured message |
+| `obligation <id> [event] [flags]` | inspect or append a versioned obligation event |
+| `obligations [--agent <name>] [--all]` | everything outstanding across the ledger |
+| `clearance <id> [revoke\|expire] [flags]` | inspect, revoke or expire a clearance |
+| `clearances [--all]` | every clearance still in force |
+| `files <agent> [--hours 24]` | every file an agent has touched, and why |
+| `blame <path>` | who has been in this file, newest first |
+| `sessions <words> [--all] [--limit n]` | find a past conversation by what was said in it, and resume it |
+| `quit <name> [--force]` | drop a session off the roster; no liveness check |
+| `clear [--force]` | wipe the roster and claims; the log is kept |
+| `export [path]` | copy the store somewhere safe before anything destructive |
+| `init [--check [--repo]] [--test-policy <p>] [--base-ref <ref>] [--sign]` | set this repo up: crew.json, the CLAUDE.md block, settings |
+| `help` | this list |
 
 ### What you are doing
 
-| Command                                                    | Does                                                     |
-| ---------------------------------------------------------- | -------------------------------------------------------- |
-| `doing "<subject>" [--plan "a; b; c"] [--plan-doc <path>]` | open a work item; --plan is optional                     |
-| `did <n> ["<what changed>"] [--item <match>]`              | tick a step off, with what actually changed              |
-| `undo <n> [--item <match>]`                                | take a tick back; the step goes outstanding again        |
-| `step <n> "<status>" [--item <match>]`                     | note progress on a step without closing it               |
-| `add "<step>" [--item <match>]`                            | a phase the plan missed                                  |
-| `done [<subject match>] [--abandoned]`                     | close ONE item; --abandoned is the honest exit           |
-| `board [<agent>] [--history] [--all]`                      | what everyone is doing                                   |
-| `link <plan path> [--item <match>]`                        | say which plan document this item executes               |
-| `plans`                                                    | every plan with work against it, and what shipped        |
-| `mine`                                                     | my open items                                            |
-| `breaks "<what>" [--item <match>]`                         | record a breaking change; tells agents in the same files |
-| `needs "<what>" [--item <match>]`                          | record what you are blocked on, and tell them            |
+| Command | Does |
+|---|---|
+| `doing "<subject>" [--plan "a; b; c"] [--plan-doc <path>]` | open a work item; --plan is optional |
+| `did <n> ["<what changed>"] [--item <match>]` | tick a step off, with what actually changed |
+| `undo <n> [--item <match>]` | take a tick back; the step goes outstanding again |
+| `step <n> "<status>" [--item <match>]` | note progress on a step without closing it |
+| `add "<step>" [--item <match>]` | a phase the plan missed |
+| `done [<subject match>] [--abandoned]` | close ONE item; --abandoned is the honest exit |
+| `board [<agent>] [--history] [--all]` | what everyone is doing |
+| `link <plan path> [--item <match>]` | say which plan document this item executes |
+| `plans` | every plan with work against it, and what shipped |
+| `mine` | my open items |
+| `breaks "<what>" [--item <match>]` | record a breaking change; tells agents in the same files |
+| `needs "<what>" [--item <match>]` | record what you are blocked on, and tell them |
 
 ### Findings that outlive the session
 
-| Command                                                               | Does                                                        |
-| --------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Command | Does |
+|---|---|
 | `note "<title>" --topic <t> [--scope <dir>] [--kind error\|decision]` | file a finding, a bug, or a decision; `note <id>` reads one |
-| `recall <words> [--scope <dir>] [--limit n]`                          | search findings                                             |
-| `bugs [--scope <dir>] [--limit n]`                                    | errors nobody has fixed yet                                 |
-| `topics`                                                              | every topic, with how much is under it                      |
-| `topic <name> [--limit n]  \|  merge <from> <into>`                   | read one topic, or fold two together                        |
-| `tags`                                                                | every tag in use                                            |
-| `note-deprecate <id> "<why it stopped being true>"`                   | mark a finding no longer true, keeping the history          |
-| `note-supersede <old-id> <new-id>`                                    | point an old finding at the one that replaced it            |
-| `diary check`                                                         | findings that look stale, thin or duplicated                |
+| `recall <words> [--scope <dir>] [--limit n]` | search findings |
+| `bugs [--scope <dir>] [--limit n]` | errors nobody has fixed yet |
+| `topics` | every topic, with how much is under it |
+| `topic <name> [--limit n]  \|  merge <from> <into>` | read one topic, or fold two together |
+| `tags` | every tag in use |
+| `note-deprecate <id> "<why it stopped being true>"` | mark a finding no longer true, keeping the history |
+| `note-supersede <old-id> <new-id>` | point an old finding at the one that replaced it |
+| `diary check` | findings that look stale, thin or duplicated |
 
 ### What you remember about the user
 
-| Command                                                          | Does                                                       |
-| ---------------------------------------------------------------- | ---------------------------------------------------------- |
-| `remember "<title>" [--body "<detail>"] [--tags a,b] [--global]` | keep something about the user across sessions              |
-| `about-me [--all]`                                               | what you have kept                                         |
-| `memories [--agent <name>] [--all-projects]`                     | every memory every agent holds about you                   |
-| `forget <id>`                                                    | drop a memory outright -- a wrong one must not outlive you |
-| `inherit [<name>]`                                               | take up a departed agent's knowledge; bare lists them      |
+| Command | Does |
+|---|---|
+| `remember "<title>" [--body "<detail>"] [--tags a,b] [--global]` | keep something about the user across sessions |
+| `about-me [--all]` | what you have kept |
+| `memories [--agent <name>] [--all-projects]` | every memory every agent holds about you |
+| `forget <id>` | drop a memory outright -- a wrong one must not outlive you |
+| `inherit [<name>]` | take up a departed agent's knowledge; bare lists them |
 
 ### Names and roles
 
-| Command                             | Does                                         |
-| ----------------------------------- | -------------------------------------------- |
-| `call-me <name> [--agent <who>]`    | take a different name; peers type it at msg  |
-| `set-role "<role>" [--agent <who>]` | set your role: Keeper of Wet Things          |
-| `release [--agent <who>]`           | give up your name so a successor can take it |
+| Command | Does |
+|---|---|
+| `whoami [--json] [--session <id>]` | this session's name; --json adds state, work, files, peers |
+| `call-me <name> [--agent <who>]` | take a different name; peers type it at msg |
+| `set-role "<role>" [--agent <who>]` | set your role: Keeper of Wet Things |
+| `release [--agent <who>]` | give up your name so a successor can take it |
 
 <!-- END GENERATED COMMANDS -->
 
@@ -286,6 +301,7 @@ Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if 
 ## Documentation
 
 - [Views](docs/views.md) — `who`, `log`, `files`, `blame`, and the work board
+- [Statusline](docs/statusline.md) — `whoami`, and putting the agent's name in the status bar
 - [Audiences](docs/audiences.md) — every verb, split by who it is for
 - [Naming an agent](docs/naming.md) — how a session gets, keeps and changes a name
 - [Operating](docs/operating.md) — configuration, measured cost, known limits
