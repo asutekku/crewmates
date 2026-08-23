@@ -48,7 +48,7 @@ Reached from an injection, a hook, or another agent's coordination. A human *can
 | `hazard` | record a warning independently of obligations |
 | `act` | atomically create a compound structured message |
 | `touching` | claim files before editing; whoever holds them is told now |
-| `lock` | hold a shared resource (tests, a port); waiters are told when it frees |
+| `lock` | hold a shared resource (tests, a port); waiters are told on release |
 | `unlock` | release a lock you hold |
 | `doing` | open a work item; --plan is optional |
 | `did` | tick a step off, with what actually changed |

@@ -96,7 +96,7 @@ export const VERBS: readonly Verb[] = [
   { verb: "clearance", audience: "oversight", args: '<id> [revoke|expire] [flags]', blurb: "inspect, revoke or expire a clearance", group: "presence" },
   { verb: "clearances", audience: "oversight", args: "[--all]", blurb: "every clearance still in force", group: "presence" },
   { verb: "touching", audience: "agent", args: "<path> [<path>...]", blurb: "claim files before editing; whoever holds them is told now", group: "presence" },
-  { verb: "lock", audience: "agent", args: '<name> [--for 5m] [--note "<why>"]', blurb: "hold a shared resource (tests, a port); waiters are told when it frees", group: "presence" },
+  { verb: "lock", audience: "agent", args: '<name> [--for 5m] [--note "<why>"]', blurb: "hold a shared resource (tests, a port); waiters are told on release", group: "presence" },
   { verb: "unlock", audience: "agent", args: "<name>", blurb: "release a lock you hold", group: "presence" },
   { verb: "locks", audience: "shared", args: "", blurb: "every lock held, by whom, for how much longer", group: "presence" },
   { verb: "files", audience: "human", args: "<agent> [--hours 24]", blurb: "every file an agent has touched, and why", group: "presence" },

@@ -246,7 +246,7 @@ Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if 
 | `clearance <id> [revoke\|expire] [flags]` | inspect, revoke or expire a clearance |
 | `clearances [--all]` | every clearance still in force |
 | `touching <path> [<path>...]` | claim files before editing; whoever holds them is told now |
-| `lock <name> [--for 5m] [--note "<why>"]` | hold a shared resource (tests, a port); waiters are told when it frees |
+| `lock <name> [--for 5m] [--note "<why>"]` | hold a shared resource (tests, a port); waiters are told on release |
 | `unlock <name>` | release a lock you hold |
 | `locks` | every lock held, by whom, for how much longer |
 | `files <agent> [--hours 24]` | every file an agent has touched, and why |
