@@ -160,6 +160,21 @@ export class ActivityStore {
     return start.immediate();
   }
 
+  /**
+   * Backfill a live minion's task label once the harness reveals it.
+   *
+   * SubagentStart carries no description — only SubagentStop does — so a row
+   * starts blank and the first later sighting (the subagent statusline feed)
+   * fills it. Guarded on `task = ''` so a label set at spawn is never clobbered
+   * by a staler one.
+   */
+  describeMinion(agentId: string, task: string): void {
+    if (task === "") return;
+    this.db.query(
+      `UPDATE minions SET task = ? WHERE agent_id = ? AND ended_ms = 0 AND task = ''`,
+    ).run(task, agentId);
+  }
+
   endMinion(agentId: string, nowMs: number, task?: string): void {
     if (task !== undefined && task !== "") {
       this.db.query(

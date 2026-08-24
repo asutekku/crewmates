@@ -456,6 +456,11 @@ export class Store {
   endMinion(agentId: string, nowMs: number, task?: string): void {
     this.activity.endMinion(agentId, nowMs, task);
   }
+
+  describeMinion(agentId: string, task: string): void {
+    this.activity.describeMinion(agentId, task);
+  }
+
   liveMinions(nowMs: number): Map<string, Minion[]> {
     return this.activity.liveMinions(nowMs);
   }

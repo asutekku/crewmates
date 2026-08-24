@@ -9,6 +9,7 @@ import {
   type Session,
   type Store,
 } from "../core/store.ts";
+import { minionName } from "../core/names.ts";
 import { agentKey, agentState, progress, type AgentState } from "../core/work.ts";
 import { booleanFlag, parseArguments, stringFlag } from "./args.ts";
 import { failCommand } from "./command.ts";
@@ -20,6 +21,20 @@ export interface WhoamiWork {
   readonly stepsTotal: number;
   /** Opened from the conversation title, not by the agent. */
   readonly auto: boolean;
+}
+
+/**
+ * A live subagent, for a statusline (or script) that wants to name it.
+ *
+ * `label` is DERIVED here rather than left for the caller to compute: it needs
+ * this session's current display name plus `minionName`'s possessive rule, and
+ * a shell script re-deriving both would drift the moment either changed.
+ */
+export interface WhoamiMinion {
+  readonly label: string;
+  readonly task: string;
+  readonly agentType: string;
+  readonly startedMs: number;
 }
 
 /** Everything a statusline or script can know about one session, in one read. */
@@ -42,6 +57,8 @@ export interface Whoami {
   readonly files: readonly string[];
   readonly contested: readonly string[];
   readonly minions: number;
+  /** Currently running subagents, most recently started first. */
+  readonly activeMinions: readonly WhoamiMinion[];
   readonly peers: number;
   readonly unread: boolean;
 }
@@ -69,9 +86,15 @@ export function collectWhoami(
   const open = store.work.openItems(agentKey(self.title, self.sessionId));
   const latest = open[0];
   const steps = latest ? progress(store.work.steps(latest.workId)) : null;
+  const parentName = displayName(self);
+  // NEWEST FIRST: a statusline showing one minion wants the one the operator
+  // just spawned, not the oldest still-running background task.
+  const minions = [...(store.liveMinions(nowMs).get(self.sessionId) ?? [])].sort(
+    (a, b) => b.startedMs - a.startedMs,
+  );
   return {
     sessionId: self.sessionId,
-    name: displayName(self),
+    name: parentName,
     label: rosterName(self),
     role: self.role,
     persona: self.persona,
@@ -90,7 +113,13 @@ export function collectWhoami(
     editing: files[0] ?? "",
     files,
     contested: contestedPaths(store.allClaims(nowMs), self, files),
-    minions: store.liveMinions(nowMs).get(self.sessionId)?.length ?? 0,
+    minions: minions.length,
+    activeMinions: minions.map((m) => ({
+      label: minionName(parentName, m.seq),
+      task: m.task,
+      agentType: m.agentType,
+      startedMs: m.startedMs,
+    })),
     peers: store.liveSessions(nowMs).filter((s) => s.sessionId !== self.sessionId).length,
     unread: hasUnread(dbPath, self.sessionId),
   };

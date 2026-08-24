@@ -22,6 +22,7 @@ import { createQuestionCommands } from "./questions.ts";
 import { CommandRegistry } from "./registry.ts";
 import { createRosterCommands } from "./roster.ts";
 import { createSessionCommands } from "./sessions.ts";
+import { createSubagentStatuslineCommands } from "./subagent-statusline.ts";
 import type { CliContext, CommandFactory } from "./types.ts";
 import { createTouchingCommands } from "./touching.ts";
 import { createWhoamiCommands } from "./whoami.ts";
@@ -38,6 +39,7 @@ const COMMAND_FAMILIES: readonly CommandFactory[] = [
   createSessionCommands,
   createAdminCommands,
   createWhoamiCommands,
+  createSubagentStatuslineCommands,
   createTouchingCommands,
   createDiffCommands,
   createLockCommands,

@@ -25,11 +25,11 @@ A verb an agent is never told about is a verb agents never use — measured, and
 | Audience | Count |
 | -------- | ----- |
 | agent | 37 |
-| human | 14 |
+| human | 15 |
 | shared | 7 |
 | oversight | 10 |
 
-Derived from `core/verbs.ts` by `test/tools/regen-audiences.ts`; 68 verbs in total. Do not edit between the markers.
+Derived from `core/verbs.ts` by `test/tools/regen-audiences.ts`; 69 verbs in total. Do not edit between the markers.
 
 ## Agent
 
@@ -95,6 +95,7 @@ Operator surfaces, built for a terminal window. Two fields in `who` — the conv
 | `board` | what everyone is doing |
 | `plans` | every plan with work against it, and what shipped |
 | `whoami` | this session's name; --json adds state, work, files, peers |
+| `subagent-statusline` | name and meter agent-panel rows from Claude Code's piped row JSON |
 
 ## Shared
 

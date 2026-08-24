@@ -311,6 +311,7 @@ Generated from the verb table in `core/verbs.ts`. `test/verbs.test.ts` fails if 
 | Command | Does |
 |---|---|
 | `whoami [--json] [--session <id>]` | this session's name; --json adds state, work, files, peers |
+| `subagent-statusline` | name and meter agent-panel rows from Claude Code's piped row JSON |
 | `call-me <name> [--agent <who>]` | take a different name; peers type it at msg |
 | `set-role "<role>" [--agent <who>]` | set your role: Keeper of Wet Things |
 | `persona [<id> \| random \| off] [--agent <who>]` | a voice to talk in; tone only, bare lists them |

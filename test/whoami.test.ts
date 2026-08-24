@@ -60,6 +60,27 @@ describe("collectWhoami", () => {
       expect(me.unread).toBe(true);
     });
   });
+
+  test("activeMinions carries each live subagent, newest first, already named", () => {
+    const path = freshPath();
+    withStore(path, (store) => {
+      const now = Date.now();
+      store.register("s1", MAIN, "master", now);
+      store.setAlias("s1", "rin", now);
+      store.startMinion("agent-old", "s1", now - 60_000, { task: "sweep the logs" });
+      store.startMinion("agent-new", "s1", now - 1000, { agentType: "general-purpose" });
+
+      const self = store.findBySession("s1")!;
+      const me = collectWhoami(store, self, now, path);
+      expect(me.minions).toBe(2);
+      expect(me.activeMinions.map((m) => m.label)).toEqual([
+        "Rin's Minion #2",
+        "Rin's Minion #1",
+      ]);
+      expect(me.activeMinions[1]?.task).toBe("sweep the logs");
+      expect(me.activeMinions[0]?.agentType).toBe("general-purpose");
+    });
+  });
 });
 
 describe("crew whoami", () => {

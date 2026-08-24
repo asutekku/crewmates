@@ -165,6 +165,7 @@ export const VERBS: readonly Verb[] = [
 
   // ---- identity
   { verb: "whoami", audience: "human", args: "[--json] [--session <id>]", blurb: "this session's name; --json adds state, work, files, peers", group: "identity", trackUse: false },
+  { verb: "subagent-statusline", audience: "human", args: "", blurb: "name and meter agent-panel rows from Claude Code's piped row JSON", group: "identity", trackUse: false },
   { verb: "call-me", audience: "agent", args: "<name> [--agent <who>]", blurb: "take a different name; peers type it at msg", group: "identity", aliases: ["name"] },
   { verb: "set-role", audience: "agent", args: '"<role>" [--agent <who>]', blurb: "set your role: Keeper of Wet Things", group: "identity", aliases: ["call-you", "role"] },
   { verb: "persona", audience: "shared", args: "[<id> | random | off] [--agent <who>]", blurb: "a voice to talk in; tone only, bare lists them", group: "identity" },
